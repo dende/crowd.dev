@@ -52,6 +52,10 @@ cube(`Activities`, {
       type: `string`,
       shown: false,
     },
+    sentiment: {
+      sql: `COALESCE(${CUBE}.sentiment->>'label', '')`,
+      type: `string`,
+    },
 
     sourceid: {
       sql: `${CUBE}."sourceId"`,
@@ -76,12 +80,6 @@ cube(`Activities`, {
       primaryKey: true,
     },
 
-    info: {
-      sql: `info`,
-      type: `string`,
-      shown: false,
-    },
-
     type: {
       sql: `type`,
       type: `string`,
@@ -99,11 +97,6 @@ cube(`Activities`, {
       shown: false,
     },
 
-    crowdinfo: {
-      sql: `${CUBE}."crowdInfo"`,
-      type: `string`,
-      shown: false,
-    },
 
     parentid: {
       sql: `${CUBE}."parentId"`,
@@ -113,12 +106,6 @@ cube(`Activities`, {
 
     createdbyid: {
       sql: `${CUBE}."createdById"`,
-      type: `string`,
-      shown: false,
-    },
-
-    importhash: {
-      sql: `${CUBE}."importHash"`,
       type: `string`,
       shown: false,
     },
