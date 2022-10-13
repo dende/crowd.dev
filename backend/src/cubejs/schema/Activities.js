@@ -57,6 +57,11 @@ cube(`Activities`, {
       type: `string`,
     },
 
+    channel: {
+      sql: `COALESCE(${CUBE}.channel, '')`,
+      type: `string`,
+    },
+
     sourceid: {
       sql: `${CUBE}."sourceId"`,
       type: `string`,
