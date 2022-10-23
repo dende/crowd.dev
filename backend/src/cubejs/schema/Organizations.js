@@ -111,7 +111,7 @@ cube(`Organizations`, {
       sql: `${CUBE}."deletedAt"`,
       type: `time`,
     },
-    joinedAt: {
+    earliestJoinedAt: {
       sql: `${CUBE}."joinedAt"`,
       type: `time`,
       subQuery: true,
