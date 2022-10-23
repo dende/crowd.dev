@@ -23,11 +23,7 @@ cube(`Organizations`, {
       type: `count`,
       drillMembers: [updatedbyid, id, name, createdbyid, tenantId, createdat, updatedat],
     },
-    joinedAt:{
-      type: `min`,
-      sql: `${Members}."joinedAt"`,
-      shown: false
-    }
+
   },
   dimensions: {
     emails: {
@@ -112,7 +108,7 @@ cube(`Organizations`, {
       type: `time`,
     },
     earliestJoinedAt: {
-      sql: `${CUBE}."joinedAt"`,
+      sql: `${MemberOrganizations}."joinedAt"`,
       type: `time`,
       subQuery: true,
     },

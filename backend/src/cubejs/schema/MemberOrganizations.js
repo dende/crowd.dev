@@ -18,7 +18,13 @@ cube(`MemberOrganizations`, {
     },
   },
 
-  measures: {},
+  measures: {
+    joinedAt:{
+      type: `min`,
+      sql: `${Members}."joinedAt"`,
+      shown: false
+    }
+  },
 
   dimensions: {
     id: {
