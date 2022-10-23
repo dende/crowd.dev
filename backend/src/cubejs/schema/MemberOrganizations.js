@@ -21,7 +21,7 @@ cube(`MemberOrganizations`, {
   measures: {
     joinedAt:{
       type: `min`,
-      sql: `${Activities}."timestamp"`,
+      sql: `${Membbers}."joinedAt"`,
       // shown: false
     }
   },
