@@ -22,7 +22,7 @@ cube(`MemberOrganizations`, {
     joinedAt:{
       type: `min`,
       sql: `${Members}."joinedAt"`,
-      shown: false
+      // shown: false
     }
   },
 
