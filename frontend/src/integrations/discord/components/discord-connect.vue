@@ -23,6 +23,6 @@ const connect = () => {
 }
 
 const connectUrl = computed(() => {
-  return config.discordInstallationUrl
+  return `${config.backendUrl}/`
 })
 </script>

@@ -1,5 +1,5 @@
 import passport from 'passport'
-import { TWITTER_CONFIG, SLACK_CONFIG } from '../../config'
+import { TWITTER_CONFIG, SLACK_CONFIG, DISCORD_CONFIG } from '../../config'
 import { authMiddleware } from '../../middlewares/authMiddleware'
 import TenantService from '../../services/tenantService'
 import { getTwitterStrategy } from '../../services/auth/passportStrategies/superfaceTwitterStrategy'
@@ -22,10 +22,6 @@ export default (app) => {
   app.put(
     `/authenticate/:tenantId/:code`,
     safeWrap(require('./helpers/githubAuthenticate').default),
-  )
-  app.put(
-    `/discord-authenticate/:tenantId/:guild_id`,
-    safeWrap(require('./helpers/discordAuthenticate').default),
   )
   app.get(
     '/tenant/:tenantId/devto-validate',
@@ -90,6 +86,17 @@ export default (app) => {
         next()
       },
       safeWrap(require('./helpers/twitterAuthenticateCallback').default),
+    )
+  }
+
+  /**
+   * Discord integration endpoints
+   */
+  if (DISCORD_CONFIG.clientId) {
+    // path to start the OAuth flow
+    app.get(
+      '/discord/:tenantId/connect',
+      safeWrap(require('./helpers/discordAuthenticate').default),
     )
   }
 
