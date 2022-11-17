@@ -98,6 +98,23 @@ export default (app) => {
       '/discord/:tenantId/connect',
       safeWrap(require('./helpers/discordAuthenticate').default),
     )
+
+    // OAuth callback url
+    app.get(
+      '/discord/callback',
+      (req, _res, next) => {
+        const { crowdToken } = JSON.parse(Buffer.from(req.query.state, 'base64url').toString())
+        req.headers.authorization = `Bearer ${crowdToken}`
+        next()
+      },
+      authMiddleware,
+      async (req, _res, next) => {
+        const { tenantId } = JSON.parse(Buffer.from(req.query.state, 'base64url').toString())
+        req.currentTenant = await new TenantService(req).findById(tenantId)
+        next()
+      },
+      safeWrap(require('./helpers/discordAuthenticateCallback').default),
+    )
   }
 
   /**

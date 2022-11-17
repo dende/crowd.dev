@@ -23,8 +23,6 @@ const defaultConfig = {
     process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY || '',
   gitHubInstallationUrl:
     process.env.VUE_APP_GITHUB_INSTALLATION_URL,
-  discordInstallationUrl:
-    process.env.VUE_APP_DISCORD_INSTALLATION_URL,
   cubejsUrl: process.env.VUE_APP_CUBEJS_URL,
   conversationPublicUrl:
     process.env.VUE_APP_CONVERSATIONS_PUBLIC_URL,
@@ -46,8 +44,6 @@ const composedConfig = {
     'CROWD_VUE_APP_STRIPE_PUBLISHABLE_KEY' || '',
   gitHubInstallationUrl:
     'CROWD_VUE_APP_GITHUB_INSTALLATION_URL',
-  discordInstallationUrl:
-    'CROWD_VUE_APP_DISCORD_INSTALLATION_URL',
   cubejsUrl: 'CROWD_VUE_APP_CUBEJS_URL',
   conversationPublicUrl:
     'CROWD_VUE_APP_CONVERSATIONS_PUBLIC_URL',
