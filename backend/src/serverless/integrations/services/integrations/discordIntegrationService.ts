@@ -1,8 +1,9 @@
 import moment from 'moment/moment'
-import { DiscordMessages, DiscordMembers, DiscordMention } from '../../types/discordTypes'
+import request from 'superagent'
 import { DISCORD_CONFIG } from '../../../../config'
 import { DiscordMemberAttributes } from '../../../../database/attributes/member/discord'
 import { MemberAttributeName } from '../../../../database/attributes/member/enums'
+import IntegrationRepository from '../../../../database/repositories/integrationRepository'
 import MemberAttributeSettingsService from '../../../../services/memberAttributeSettingsService'
 import {
   IIntegrationStream,
@@ -14,6 +15,7 @@ import { IntegrationType, PlatformType } from '../../../../types/integrationEnum
 import { timeout } from '../../../../utils/timing'
 import Operations from '../../../dbOperations/operations'
 import { DiscordGrid } from '../../grid/discordGrid'
+import { DiscordMembers, DiscordMention, DiscordMessages } from '../../types/discordTypes'
 import { AddActivitiesSingle } from '../../types/messageTypes'
 import { Channels } from '../../types/regularTypes'
 import getChannels from '../../usecases/discord/getChannels'
@@ -43,19 +45,21 @@ export class DiscordIntegrationService extends IntegrationServiceBase {
   }
 
   async preprocess(context: IStepContext): Promise<void> {
+    await this.checkToken(context)
+
     const guildId = context.integration.integrationIdentifier
 
     const threads: Channels = await getThreads(
       {
         guildId,
-        token: this.token,
+        token: this.getToken(context),
       },
       this.logger(context),
     )
     let channelsFromDiscordAPI: Channels = await getChannels(
       {
         guildId,
-        token: this.token,
+        token: this.getToken(context),
       },
       this.logger(context),
     )
@@ -135,7 +139,7 @@ export class DiscordIntegrationService extends IntegrationServiceBase {
         const { records, nextPage, limit, timeUntilReset } = await fn(
           {
             ...arg,
-            token: this.token,
+            token: this.getToken(context),
             page: stream.metadata.page,
             perPage: 100,
           },
@@ -401,6 +405,81 @@ export class DiscordIntegrationService extends IntegrationServiceBase {
         return { fn: getMembers, arg: { guildId } }
       default:
         return { fn: getMessages, arg: { channelId: stream } }
+    }
+  }
+
+  private getToken(context: IStepContext): string {
+    if (context.integration.token) {
+      return `Bearer ${context.integration.token}`
+    }
+
+    return this.token
+  }
+
+  private async checkToken(context: IStepContext): Promise<void> {
+    const log = this.logger(context)
+    if (context.integration.token) {
+      const tokenExpiresAt = moment(context.integration.settings.tokenExpiresAt)
+      // const tokenIssuedAt = moment(context.integration.settings.tokenIssuedAt)
+
+      // const totalTokenDurationMinutes = tokenExpiresAt.diff(tokenIssuedAt, 'minutes')
+
+      // // lets take 25% minutes of the total token duration
+      // const bufferMinutes = totalTokenDurationMinutes * 0.25
+
+      // // and use it as a marker to tell us when to refresh the token
+      // const markerDate = moment().add(bufferMinutes, 'minutes')
+      const markerDate = moment().add(8, 'days')
+      if (markerDate.isAfter(tokenExpiresAt)) {
+        log.info(
+          { token: context.integration.token, refreshToken: context.integration.refreshToken },
+          'Refreshing Discord OAuth2 token!',
+        )
+        // we need to refresh the token
+        const data = {
+          client_id: DISCORD_CONFIG.clientId,
+          client_secret: DISCORD_CONFIG.clientSecret,
+          grant_type: 'refresh_token',
+          refresh_token: context.integration.refreshToken,
+        }
+
+        try {
+          const response = await request
+            .post('https://discord.com/api/v10/oauth2/token')
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .send(data)
+
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          const { access_token, refresh_token, expires_in } = response.body
+          context.integration.token = access_token
+          context.integration.refreshToken = refresh_token
+          context.integration.settings.tokenExpiresAt = moment()
+            .add(expires_in - 60, 'seconds')
+            .toISOString()
+          context.integration.settings.tokenIssuedAt = moment()
+            .subtract(60, 'seconds')
+            .toISOString()
+
+          // update now so we don't lose it later by some error
+          await IntegrationRepository.update(
+            context.integration.id,
+            {
+              token: access_token,
+              refreshToken: refresh_token,
+              settings: context.integration.settings,
+            },
+            context.repoContext,
+          )
+        } catch (err) {
+          log.error(
+            err,
+            { token: context.integration.token, refreshToken: context.integration.refreshToken },
+            'Error while refreshing Discord OAuth2 token!',
+          )
+
+          throw err
+        }
+      }
     }
   }
 }

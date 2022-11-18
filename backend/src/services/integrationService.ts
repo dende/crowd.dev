@@ -286,13 +286,25 @@ export default class IntegrationService {
   /**
    * Adds discord integration to a tenant
    * @param guildId Guild id of the discord server
+   * @param token User auth token to use
+   * @param refreshToken User refresh token to get new auth token once expired
+   * @param expiresIn When will the auth token expire in seconds?
    * @returns integration object
    */
-  async discordConnect(guildId) {
+  async discordConnect(guildId, token: string, refreshToken: string, expiresIn: number) {
     const integration = await this.createOrUpdate({
       platform: PlatformType.DISCORD,
+      token,
+      refreshToken,
       integrationIdentifier: guildId,
-      settings: { channels: [], updateMemberAttributes: true },
+      settings: {
+        channels: [],
+        updateMemberAttributes: true,
+        tokenExpiresAt: moment()
+          .add(expiresIn - 60, 'seconds')
+          .toISOString(),
+        tokenIssuedAt: moment().subtract(60, 'seconds').toISOString(),
+      },
       status: 'in-progress',
     })
 

@@ -156,9 +156,15 @@ export abstract class IntegrationServiceBase {
 
   logger(context: IStepContext): Logger {
     if (context.serviceContext.log) {
-      return createChildLogger(this.type, context.serviceContext.log || getServiceLogger())
+      return createChildLogger(
+        context.integration.platform,
+        context.serviceContext.log || getServiceLogger(),
+        { integrationId: context.integration?.id },
+      )
     }
 
-    return createServiceChildLogger(this.type)
+    return createServiceChildLogger(context.integration.platform, {
+      integrationId: context.integration?.id,
+    })
   }
 }
