@@ -8,5 +8,7 @@ export default async (req, res) => {
 
   const payload = req.currentUser
 
+  console.log('remove')
+
   await req.responseHandler.success(req, res, payload)
 }
