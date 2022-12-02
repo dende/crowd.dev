@@ -231,6 +231,8 @@ export default class ConversationService extends LoggingBase {
       } else {
         channel = activity.channel.split('/')[1]
       }
+    } else {
+      channel = activity.channel
     }
 
     return channel

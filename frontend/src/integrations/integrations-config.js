@@ -3,12 +3,16 @@ import discord from './discord'
 import slack from './slack'
 import twitter from './twitter'
 import devto from './devto'
+import hackernews from './hackernews'
 import discourse from './discourse'
 import stackoverflow from './stackoverflow'
 import reddit from './reddit'
 import linkedin from './linkedin'
 import zapier from './zapier'
+import crunchbase from './crunchbase'
 import make from './make'
+
+import config from '@/config'
 
 class IntegrationsConfig {
   get integrations() {
@@ -18,12 +22,14 @@ class IntegrationsConfig {
       slack,
       twitter,
       devto,
+      ...(config.hasPremiumModules && { hackernews }),
       discourse,
       stackoverflow,
       reddit,
       linkedin,
       zapier,
-      make
+      crunchbase,
+      ...(!config.hasPremiumModules && { make })
     }
   }
 
@@ -54,13 +60,15 @@ class IntegrationsConfig {
   }
 
   mappedConfigs(store) {
-    return this.configs.map((i) => this._mapper(i, store))
+    return this.configs
+      .map((i) => this._mapper(i, store))
+      .filter((i) => !i.hideAsIntegration)
   }
 
   mappedEnabledConfigs(store) {
-    return this.enabledConfigs.map((i) =>
-      this._mapper(i, store)
-    )
+    return this.enabledConfigs
+      .map((i) => this._mapper(i, store))
+      .filter((i) => !i.hideAsIntegration)
   }
 }
 
