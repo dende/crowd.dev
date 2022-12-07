@@ -82,6 +82,7 @@ class VectorAPI:
 
         Args:
             points ([Point]): points to upsert.
+            processed (Bool): whether the points have already been turned into Qdrant vectors
         """
 
         if (len(points) == 0):
@@ -111,6 +112,9 @@ class VectorAPI:
         return "OK"
 
     def count(self):
+        """
+        Count the number of vectors in a collection.
+        """
         return self.client.count(
             collection_name=self.collection_name,
             exact=True,
