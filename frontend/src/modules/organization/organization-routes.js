@@ -14,9 +14,8 @@ const isOrganizationsFeatureEnabled = () => {
   )
 }
 
-const OrganizationPaywallPage = import(
-  '@/modules/layout/components/paywall-page.vue'
-)
+const OrganizationPaywallPage = () =>
+  import('@/modules/layout/components/paywall-page.vue')
 
 const OrganizationListPage = () =>
   import(
