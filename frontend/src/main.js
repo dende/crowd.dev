@@ -37,7 +37,7 @@ i18nInit()
     posthog.init(config.posthogKey, {
       autocapture: false,
       capture_pageview: false,
-      disable_persistence: true
+      disable_persistence: false
     })
   }
 
