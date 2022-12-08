@@ -140,13 +140,13 @@ export default {
   },
   methods: {
     ...mapActions({
-      doChangeSort: 'conversation/doChangeSort',
+      doChangeSort: 'automation/doChangeSort',
       doChangePaginationCurrentPage:
-        'conversation/doChangePaginationCurrentPage',
+        'automation/doChangePaginationCurrentPage',
       doChangePaginationPageSize:
-        'conversation/doChangePaginationPageSize',
-      doMountTable: 'conversation/doMountTable',
-      doDestroy: 'member/doDestroy'
+        'automation/doChangePaginationPageSize',
+      doMountTable: 'automation/doMountTable',
+      doDestroy: 'automation/doDestroy'
     }),
 
     doRefresh() {
