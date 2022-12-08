@@ -1,6 +1,22 @@
 import Layout from '@/modules/layout/components/layout'
 import Permissions from '@/security/permissions'
 import { store } from '@/store'
+import config from '@/config'
+import {
+  isFeatureEnabled,
+  featureFlags
+} from '@/utils/posthog'
+
+const isOrganizationsFeatureEnabled = () => {
+  return (
+    config.hasPremiumModules &&
+    isFeatureEnabled(featureFlags.organizations)
+  )
+}
+
+const OrganizationPaywallPage = import(
+  '@/modules/layout/components/paywall-page.vue'
+)
 
 const OrganizationListPage = () =>
   import(
@@ -31,7 +47,11 @@ export default [
           auth: true,
           permission: Permissions.values.organizationRead
         },
-        beforeEnter: (to) => {
+        beforeEnter: (to, _from, next) => {
+          if (!isOrganizationsFeatureEnabled()) {
+            next({ name: 'organizationPaywall' })
+          }
+
           if (
             to.query.activeTab !== undefined &&
             to.query.activeTab !==
@@ -42,6 +62,8 @@ export default [
               to.query.activeTab
             )
           }
+
+          next()
         }
       },
       {
@@ -51,6 +73,13 @@ export default [
         meta: {
           auth: true,
           permission: Permissions.values.organizationCreate
+        },
+        beforeEnter: (_to, _from, next) => {
+          if (!isOrganizationsFeatureEnabled()) {
+            next({ name: 'organizationPaywall' })
+          }
+
+          next()
         }
       },
       {
@@ -61,7 +90,14 @@ export default [
           auth: true,
           permission: Permissions.values.organizationEdit
         },
-        props: true
+        props: true,
+        beforeEnter: (_to, _from, next) => {
+          if (!isOrganizationsFeatureEnabled()) {
+            next({ name: 'organizationPaywall' })
+          }
+
+          next()
+        }
       },
       {
         name: 'organizationView',
@@ -71,7 +107,19 @@ export default [
           auth: true,
           permission: Permissions.values.organizationRead
         },
-        props: true
+        props: true,
+        beforeEnter: (_to, _from, next) => {
+          if (!isOrganizationsFeatureEnabled()) {
+            next({ name: 'organizationPaywall' })
+          }
+
+          next()
+        }
+      },
+      {
+        name: 'organizationPaywall',
+        path: '/organizations/403',
+        component: OrganizationPaywallPage
       }
     ]
   }
