@@ -28,15 +28,16 @@
         <div
           class="flex items-center justify-between flex-grow"
         >
-          <span
-            class="badge text-xs"
-            :class="
-              tenant.plan === 'Growth'
-                ? 'badge--purple'
-                : ''
-            "
-            >{{ getPlan(tenant.plan) }}</span
-          >
+          <div class="flex flex-col items-start gap-1">
+            <span class="text-sm">{{
+              getPlan(tenant.plan)
+            }}</span>
+            <span
+              v-if="getTrialDate(tenant)"
+              class="text-2xs text-purple-600"
+              >{{ getTrialDate(tenant) }}</span
+            >
+          </div>
           <button
             class="el-dropdown-link btn rounder-md hover:bg-gray-200 w-8 py-1 flex items-center justify-center"
             type="button"
@@ -90,6 +91,7 @@ import {
 } from 'vue'
 import AppTenantForm from '@/modules/tenant/components/tenant-form'
 import config from '@/config'
+import { getTrialDate } from '@/utils/date'
 
 const store = useStore()
 
