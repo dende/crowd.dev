@@ -38,7 +38,7 @@ i18nInit()
       autocapture: false,
       capture_pageview: false,
       disable_persistence: false,
-      persistence: 'memory'
+      persistence: 'cookie'
     })
   }
 

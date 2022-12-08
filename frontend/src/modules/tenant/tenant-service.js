@@ -46,6 +46,7 @@ export class TenantService {
       }
     }
     posthog.group('tenant', tenantId)
+    posthog.reloadFeatureFlags()
   }
 
   static async update(id, data) {
