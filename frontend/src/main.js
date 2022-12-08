@@ -36,7 +36,8 @@ i18nInit()
   if (!config.isCommunityVersion) {
     posthog.init(config.posthogKey, {
       autocapture: false,
-      capture_pageview: false
+      capture_pageview: false,
+      disable_persistence: true
     })
   }
 
