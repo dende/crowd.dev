@@ -141,9 +141,9 @@ export default {
 
       if (config.isCommunityVersion || isFlagEnabled) {
         this.isAutomationDrawerOpen = true
+      } else {
+        this.$router.push({ name: 'settingsPaywall' })
       }
-
-      // TODO: Add logic for when feature is not enabled
     },
     pluralize
   }
