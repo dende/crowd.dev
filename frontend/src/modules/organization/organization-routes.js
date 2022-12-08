@@ -7,16 +7,15 @@ import {
   featureFlags
 } from '@/utils/posthog'
 
-const isOrganizationsFeatureEnabled = () => {
+const isOrganizationsFeatureEnabled = async () => {
   return (
     config.hasPremiumModules &&
-    isFeatureEnabled(featureFlags.organizations)
+    (await isFeatureEnabled(featureFlags.organizations))
   )
 }
 
-const OrganizationPaywallPage = import(
-  '@/modules/layout/components/paywall-page.vue'
-)
+const OrganizationPaywallPage = () =>
+  import('@/modules/layout/components/paywall-page.vue')
 
 const OrganizationListPage = () =>
   import(
@@ -47,8 +46,8 @@ export default [
           auth: true,
           permission: Permissions.values.organizationRead
         },
-        beforeEnter: (to, _from, next) => {
-          if (!isOrganizationsFeatureEnabled()) {
+        beforeEnter: async (to, _from, next) => {
+          if (!(await isOrganizationsFeatureEnabled())) {
             next({ name: 'organizationPaywall' })
           }
 
@@ -74,8 +73,8 @@ export default [
           auth: true,
           permission: Permissions.values.organizationCreate
         },
-        beforeEnter: (_to, _from, next) => {
-          if (!isOrganizationsFeatureEnabled()) {
+        beforeEnter: async (_to, _from, next) => {
+          if (!(await isOrganizationsFeatureEnabled())) {
             next({ name: 'organizationPaywall' })
           }
 
@@ -91,8 +90,8 @@ export default [
           permission: Permissions.values.organizationEdit
         },
         props: true,
-        beforeEnter: (_to, _from, next) => {
-          if (!isOrganizationsFeatureEnabled()) {
+        beforeEnter: async (_to, _from, next) => {
+          if (!(await isOrganizationsFeatureEnabled())) {
             next({ name: 'organizationPaywall' })
           }
 
@@ -108,8 +107,8 @@ export default [
           permission: Permissions.values.organizationRead
         },
         props: true,
-        beforeEnter: (_to, _from, next) => {
-          if (!isOrganizationsFeatureEnabled()) {
+        beforeEnter: async (_to, _from, next) => {
+          if (!(await isOrganizationsFeatureEnabled())) {
             next({ name: 'organizationPaywall' })
           }
 
