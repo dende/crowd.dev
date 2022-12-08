@@ -31,11 +31,11 @@
           <span
             class="badge text-xs"
             :class="
-              tenant.plan === 'premium'
+              tenant.plan === 'Growth'
                 ? 'badge--purple'
                 : ''
             "
-            >{{ planLabelOf(tenant.plan) }}</span
+            >{{ getPlan(tenant.plan) }}</span
           >
           <button
             class="el-dropdown-link btn rounder-md hover:bg-gray-200 w-8 py-1 flex items-center justify-center"
@@ -88,8 +88,8 @@ import {
   ref,
   reactive
 } from 'vue'
-import { i18n } from '@/i18n'
 import AppTenantForm from '@/modules/tenant/components/tenant-form'
+import config from '@/config'
 
 const store = useStore()
 
@@ -128,7 +128,11 @@ const handleSuccess = () => {
   emit('update:modelValue', false)
 }
 
-const planLabelOf = (plan) => {
-  return i18n(`plan.${plan}.label`)
+const getPlan = (plan) => {
+  if (config.isCommunityVersion) {
+    return 'Community'
+  }
+
+  return plan
 }
 </script>
