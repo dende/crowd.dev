@@ -2,6 +2,7 @@ import authAxios from '@/shared/axios/auth-axios'
 import { tenantSubdomain } from '@/modules/tenant/tenant-subdomain'
 import AuthCurrentTenant from '@/modules/auth/auth-current-tenant'
 import config from '@/config'
+import posthog from 'posthog-js'
 
 export class TenantService {
   static async fetchAndApply() {
@@ -44,6 +45,7 @@ export class TenantService {
         console.error(error)
       }
     }
+    posthog.group('tenant', tenantId)
   }
 
   static async update(id, data) {
