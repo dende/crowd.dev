@@ -7,10 +7,10 @@ import {
   featureFlags
 } from '@/utils/posthog'
 
-const isEagleEyeFeatureEnabled = () => {
+const isEagleEyeFeatureEnabled = async () => {
   return (
     config.hasPremiumModules &&
-    isFeatureEnabled(featureFlags.eagleEye)
+    (await isFeatureEnabled(featureFlags.eagleEye))
   )
 }
 
@@ -37,8 +37,8 @@ export default [
           auth: true,
           permission: Permissions.values.eagleEyeRead
         },
-        beforeEnter: (to, _from, next) => {
-          if (!isEagleEyeFeatureEnabled()) {
+        beforeEnter: async (to, _from, next) => {
+          if (!(await isEagleEyeFeatureEnabled())) {
             next({ name: 'eagleEyePaywall' })
           }
 
