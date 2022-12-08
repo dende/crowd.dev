@@ -15,13 +15,8 @@ export const isFeatureEnabled = (flag) => {
   }
 
   const tenant = store.getters['auth/currentTenant']
-  const automationList = store.getters['automation/rows']
 
-  posthog.group('tenant', tenant.id, {
-    name: tenant.name,
-    plan: tenant.plan,
-    automationCount: automationList.length
-  })
+  posthog.group('tenant', tenant.id)
 
   return posthog.isFeatureEnabled(flag)
 }
