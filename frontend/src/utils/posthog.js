@@ -9,7 +9,7 @@ export const featureFlags = {
   automations: 'automations'
 }
 
-export const isFeatureEnabled = (flag) => {
+export const isFeatureEnabled = async (flag) => {
   if (config.isCommunityVersion) {
     return true
   }
@@ -21,7 +21,7 @@ export const isFeatureEnabled = (flag) => {
   posthog.group('tenant', tenant.id)
 
   try {
-    return posthog.isFeatureEnabled(flag)
+    return await posthog.isFeatureEnabled(flag)
   } catch (e) {
     console.error(e)
     return false
