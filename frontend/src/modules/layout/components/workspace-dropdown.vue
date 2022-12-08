@@ -131,7 +131,7 @@ import { useStore } from 'vuex'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppTenantListDrawer from '@/modules/tenant/components/tenant-list-drawer'
 import config from '@/config'
-import moment from 'moment'
+import { getTrialDate } from '@/utils/date'
 
 const store = useStore()
 
@@ -162,19 +162,6 @@ const getPlan = (plan) => {
   }
 
   return plan
-}
-
-const getTrialDate = (tenant) => {
-  if (config.isCommunityVersion || !tenant.isTrialPlan) {
-    return null
-  }
-
-  const daysLeft = moment(tenant.trialEndsAt).diff(
-    moment(),
-    'days'
-  )
-
-  return `Trial (${daysLeft < 0 ? 0 : daysLeft} days left)`
 }
 
 const clickOutsideListener = (event) => {
