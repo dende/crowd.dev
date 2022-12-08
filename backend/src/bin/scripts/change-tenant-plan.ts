@@ -72,9 +72,11 @@ if (parameters.help || !parameters.tenant || !parameters.plan) {
 
     const options = await SequelizeRepository.getDefaultIRepositoryOptions()
     const tenantIds = parameters.tenant.split(',')
+    const posthog = new PostHog(POSTHOG_CONFIG.apiKey, { flushAt: 1, flushInterval: 1 })
 
     for (const tenantId of tenantIds) {
       const tenant = await options.database.tenant.findByPk(tenantId)
+      
 
       if (!tenant) {
         log.error({ tenantId }, 'Tenant not found!')
@@ -89,11 +91,14 @@ if (parameters.help || !parameters.tenant || !parameters.plan) {
 
         setPosthogTenantProperties(
           updated,
-          new PostHog(POSTHOG_CONFIG.apiKey, { flushAt: 1, flushInterval: 1 }),
+          posthog,
           options.database,
         )
+      
       }
     }
+
+    posthog.shutdown()
 
     // give time to posthog to process queue messages
     await timeout(2000)

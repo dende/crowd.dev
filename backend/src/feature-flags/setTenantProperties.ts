@@ -25,6 +25,5 @@ export default async function setPosthogTenantProperties(
     }
     console.log(payload)
     posthog.groupIdentify(payload)
-    posthog.flush()
   }
 }
