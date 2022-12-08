@@ -87,7 +87,8 @@ export default {
 
   data() {
     return {
-      drawerConversationId: null
+      drawerConversationId: null,
+      hasPremiumPlan: false
     }
   },
 
@@ -100,13 +101,16 @@ export default {
     }),
     computedCrowdOpenLink() {
       return `${config.conversationPublicUrl}/${this.currentTenant.url}`
-    },
-    hasPremiumPlan() {
-      return (
-        config.hasPremiumModules &&
-        isFeatureEnabled(featureFlags.organizations)
-      )
     }
+  },
+
+  async created() {
+    const isFlagEnabled = await isFeatureEnabled(
+      featureFlags.communityCenterPro
+    )
+
+    this.hasPremiumPlan =
+      config.hasPremiumModules && isFlagEnabled
   },
 
   async mounted() {

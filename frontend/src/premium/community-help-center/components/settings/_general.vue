@@ -81,7 +81,13 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue'
+import {
+  defineProps,
+  defineEmits,
+  computed,
+  onMounted,
+  ref
+} from 'vue'
 import { useStore } from 'vuex'
 import { ConversationPermissions } from '@/modules/conversation/conversation-permissions'
 import {
@@ -116,6 +122,8 @@ const emit = defineEmits([
   'update:tenantSlug',
   'update:customUrl'
 ])
+
+const hasPremiumPlan = ref(false)
 
 const computedTenantName = computed({
   get() {
@@ -155,10 +163,12 @@ const hasPermissionToCustomize = computed(() => {
   ).customize
 })
 
-const hasPremiumPlan = computed(() => {
-  return (
-    config.hasPremiumModules &&
-    isFeatureEnabled(featureFlags.organizations)
+onMounted(async () => {
+  const isFlagEnabled = await isFeatureEnabled(
+    featureFlags.communityCenterPro
   )
+
+  hasPremiumPlan.value =
+    config.hasPremiumModules && isFlagEnabled
 })
 </script>
