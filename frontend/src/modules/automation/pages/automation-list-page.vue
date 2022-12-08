@@ -134,11 +134,12 @@ export default {
       this.isExecutionsDrawerOpen = false
       this.automation = null
     },
-    onAddWebhookClick() {
-      if (
-        config.isCommunityVersion ||
-        isFeatureEnabled(featureFlags.automations)
-      ) {
+    async onAddWebhookClick() {
+      const isFlagEnabled = await isFeatureEnabled(
+        featureFlags.automations
+      )
+
+      if (config.isCommunityVersion || isFlagEnabled) {
         this.isAutomationDrawerOpen = true
       }
 

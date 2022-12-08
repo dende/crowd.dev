@@ -45,8 +45,11 @@ export class TenantService {
         console.error(error)
       }
     }
-    posthog.group('tenant', tenantId)
-    posthog.reloadFeatureFlags()
+
+    if (!config.isCommunityVersion) {
+      posthog.group('tenant', tenantId)
+      posthog.reloadFeatureFlags()
+    }
   }
 
   static async update(id, data) {
