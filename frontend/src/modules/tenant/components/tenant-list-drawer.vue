@@ -34,7 +34,7 @@
             }}</span>
             <span
               v-if="getTrialDate(tenant)"
-              class="text-2xs text-purple-600"
+              class="text-2xs text-yellow-600"
               >{{ getTrialDate(tenant) }}</span
             >
           </div>

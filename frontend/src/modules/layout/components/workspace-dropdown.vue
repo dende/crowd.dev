@@ -46,7 +46,7 @@
                     {{ getPlan(currentTenant.plan) }}
                     <span
                       v-if="getTrialDate(currentTenant)"
-                      class="badge !text-purple-600 !bg-purple-50 !text-3xs !py-0.5 !px-1 ml-1"
+                      class="badge badge--xs badge--light-yellow ml-1"
                       >{{
                         getTrialDate(currentTenant)
                       }}</span
@@ -94,7 +94,7 @@
               <span>{{ getPlan(tenant.plan) }}</span
               ><span
                 v-if="getTrialDate(tenant)"
-                class="!text-purple-600 !text-3xs"
+                class="!text-yellow-600 !text-3xs"
                 >{{ getTrialDate(tenant) }}</span
               >
             </div>
