@@ -11,6 +11,7 @@ export default async function setPosthogTenantProperties(
     const automationCount = await database.automation.count({
       where: {
         tenantId: tenant.id,
+        useMaster:true
       },
     })
 

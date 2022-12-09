@@ -33,6 +33,7 @@ export default async (req, res) => {
   const automationCount = await req.database.automation.count({
     where: {
       tenantId: req.currentTenant.id,
+      useMaster: true
     },
   })
   await ensureFlagUpdated(FeatureFlag.AUTOMATIONS, req.currentTenant.id, req.posthog, { plan: req.currentTenant.plan, automationCount })
