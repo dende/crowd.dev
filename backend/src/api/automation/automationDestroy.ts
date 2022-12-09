@@ -3,7 +3,8 @@ import Permissions from '../../security/permissions'
 import AutomationService from '../../services/automationService'
 import track from '../../segment/track'
 import identifyTenant from '../../segment/identifyTenant'
-import { timeout } from '../../utils/timing'
+import ensureFlagUpdated from '../../feature-flags/ensureFlagUpdated'
+import { FeatureFlag } from '../../types/common'
 
 /**
  * DELETE /tenant/{tenantId}/automation/{automationId}
@@ -27,15 +28,12 @@ export default async (req, res) => {
   // wait a small window for posthog
   // to process the queue message before returing back
   // await timeout(1000)
-
-  console.log("waiting some seconds...")
-  await timeout(100)
-  const flags = await req.posthog.getAllFlags('', {
-    groups: { tenant: req.currentTenant.id },
+  const automationCount = await req.database.automation.count({
+    where: {
+      tenantId: req.currentTenant.id,
+    },
   })
-  console.log("all flags: ")
-  console.log(flags)
-
+  await ensureFlagUpdated(FeatureFlag.AUTOMATIONS, req.currentTenant.id, req.posthog, { plan: req.currentTenant.plan, automationCount })
 
   await req.responseHandler.success(req, res, true, 204)
 }
