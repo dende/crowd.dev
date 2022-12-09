@@ -26,7 +26,16 @@ export default async (req, res) => {
 
   // wait a small window for posthog
   // to process the queue message before returing back
-  await timeout(1000)
+  // await timeout(1000)
+
+  console.log("waiting some seconds...")
+  await timeout(100)
+  const flags = await req.posthog.getAllFlags('', {
+    groups: { tenant: req.currentTenant.id },
+  })
+  console.log("all flags: ")
+  console.log(flags)
+
 
   await req.responseHandler.success(req, res, true, 204)
 }
