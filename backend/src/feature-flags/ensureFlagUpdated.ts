@@ -17,10 +17,10 @@ export default async (
         })
 
         let tries = 0
-        const MAX_TRY_COUNT = 5
+        const MAX_TRY_COUNT = 10
 
         while (expectedFlag !== featureFlagEnabled && tries < MAX_TRY_COUNT) {
-            await timeout(1000)
+            await timeout(500)
             featureFlagEnabled = await posthog.isFeatureEnabled(featureFlag, '', {
                 groups: { tenant: tenantId },
             })
