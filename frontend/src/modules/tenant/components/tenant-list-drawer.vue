@@ -7,7 +7,7 @@
     <template #content>
       <div class="flex gap-4 border-b h-8 items-center">
         <div
-          class="uppercase text-gray-400 text-2xs font-semibold tracking-wide w-70"
+          class="uppercase text-gray-400 text-2xs font-semibold tracking-wide w-60"
         >
           Name
         </div>
@@ -22,11 +22,11 @@
         :key="tenant.id"
         class="flex gap-4 items-center h-16"
       >
-        <div class="w-70 font-medium text-sm">
+        <div class="w-60 font-medium text-sm">
           {{ tenant.name }}
         </div>
         <div
-          class="flex items-center justify-between flex-grow"
+          class="flex items-center justify-between flex-grow gap-4"
         >
           <div class="flex flex-col items-start gap-1">
             <span class="text-sm">{{

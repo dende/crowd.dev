@@ -1,6 +1,8 @@
+import config from '@/config'
 import { AutomationService } from '@/modules/automation/automation-service'
 import Errors from '@/shared/error/errors'
 import Message from '@/shared/message/message'
+import posthog from 'posthog-js'
 
 const INITIAL_PAGE_SIZE = 20
 
@@ -434,6 +436,11 @@ export default {
         )
 
         commit('CREATE_SUCCESS', response)
+
+        if (!config.isCommunityVersion) {
+          posthog.reloadFeatureFlags()
+        }
+
         Message.success('Automation created successfully')
       } catch (error) {
         Errors.handle(error)
@@ -451,6 +458,10 @@ export default {
         await AutomationService.destroy(automationId)
 
         commit('DESTROY_SUCCESS', automationId)
+
+        if (!config.isCommunityVersion) {
+          posthog.reloadFeatureFlags()
+        }
 
         dispatch(
           `automation/doFetch`,
@@ -476,6 +487,10 @@ export default {
         await AutomationService.destroyAll(automationIds)
 
         commit('DESTROY_ALL_SUCCESS', automationIds)
+
+        if (!config.isCommunityVersion) {
+          posthog.reloadFeatureFlags()
+        }
 
         dispatch(
           `automation/doFetch`,
