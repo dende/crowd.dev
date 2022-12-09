@@ -5,6 +5,7 @@ import track from '../../segment/track'
 import identifyTenant from '../../segment/identifyTenant'
 import ensureFlagUpdated from '../../feature-flags/ensureFlagUpdated'
 import { FeatureFlag } from '../../types/common'
+import AutomationRepository from '../../database/repositories/automationRepository'
 
 /**
  * DELETE /tenant/{tenantId}/automation/{automationId}
@@ -27,16 +28,11 @@ export default async (req, res) => {
   track('Automation Destroyed', { id: req.params.automationId }, { ...req })
   identifyTenant(req)
 
-  // wait a small window for posthog
-  // to process the queue message before returing back
-  // await timeout(1000)
-  const automationCount = await req.database.automation.count({
-    where: {
-      tenantId: req.currentTenant.id,
-    },
-    useMaster: true
+  const automationCount = await AutomationRepository.countAll(req.database, req.currentTenant.id)
+  await ensureFlagUpdated(FeatureFlag.AUTOMATIONS, req.currentTenant.id, req.posthog, {
+    plan: req.currentTenant.plan,
+    automationCount,
   })
-  await ensureFlagUpdated(FeatureFlag.AUTOMATIONS, req.currentTenant.id, req.posthog, { plan: req.currentTenant.plan, automationCount })
 
   await req.responseHandler.success(req, res, true, 204)
 }
