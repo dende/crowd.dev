@@ -46,6 +46,8 @@ export class TenantService {
       }
     }
 
+    // Set group in posthog with tenant id
+    // Refresh feature flags each time tenant changes
     if (!config.isCommunityVersion) {
       posthog.group('tenant', tenantId)
       posthog.reloadFeatureFlags()

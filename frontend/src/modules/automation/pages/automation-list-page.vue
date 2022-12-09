@@ -74,7 +74,6 @@ import AppWebhookForm from '@/modules/automation/components/webhooks/webhook-for
 import AppWebhookExecutionList from '@/modules/automation/components/webhooks/webhook-execution-list'
 import { mapGetters, mapActions } from 'vuex'
 import pluralize from 'pluralize'
-import config from '@/config'
 import {
   isFeatureEnabled,
   featureFlags
@@ -139,7 +138,7 @@ export default {
         featureFlags.automations
       )
 
-      if (config.isCommunityVersion || isFlagEnabled) {
+      if (isFlagEnabled) {
         this.isAutomationDrawerOpen = true
       } else {
         this.$router.push({ name: 'settingsPaywall' })

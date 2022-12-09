@@ -6,7 +6,7 @@
           <h4>Community Help Center</h4>
           <span
             v-if="!hasPremiumPlan"
-            class="badge badge--small"
+            class="badge badge--sm"
             >Free</span
           >
         </div>
