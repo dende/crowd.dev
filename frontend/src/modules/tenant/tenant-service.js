@@ -2,7 +2,6 @@ import authAxios from '@/shared/axios/auth-axios'
 import { tenantSubdomain } from '@/modules/tenant/tenant-subdomain'
 import AuthCurrentTenant from '@/modules/auth/auth-current-tenant'
 import config from '@/config'
-import posthog from 'posthog-js'
 
 export class TenantService {
   static async fetchAndApply() {
@@ -44,13 +43,6 @@ export class TenantService {
       } catch (error) {
         console.error(error)
       }
-    }
-
-    // Set group in posthog with tenant id
-    // Refresh feature flags each time tenant changes
-    if (!config.isCommunityVersion) {
-      posthog.group('tenant', tenantId)
-      posthog.reloadFeatureFlags()
     }
   }
 
