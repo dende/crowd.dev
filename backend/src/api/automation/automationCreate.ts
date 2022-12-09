@@ -25,6 +25,8 @@ import ensureFlagUpdated from '../../feature-flags/ensureFlagUpdated'
 export default async (req, res) => {
   new PermissionChecker(req).validateHas(Permissions.values.automationCreate)
 
+  await req.posthog.reloadFeatureFlags()
+
   if (!(await isFeatureEnabled(FeatureFlag.AUTOMATIONS, req.currentTenant.id, req.posthog))) {
     await req.responseHandler.error(
       req,
