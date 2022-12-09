@@ -20,10 +20,11 @@ export default async function setPosthogTenantProperties(
       properties: {
         name: tenant.name,
         plan: tenant.plan,
-        automationCount,
+        automationCount: automationCount.toString(),
       },
     }
     console.log(payload)
     posthog.groupIdentify(payload)
+    posthog.flush()
   }
 }
