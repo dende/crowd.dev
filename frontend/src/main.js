@@ -53,9 +53,6 @@ i18nInit()
   app.use(Vue3Sanitize, vueSanitizeOptions)
   app.use(marked)
 
-  // Pipe posthog value into any component
-  app.provide('posthog', posthog)
-
   app.config.productionTip =
     process.env.NODE_ENV === 'production'
 

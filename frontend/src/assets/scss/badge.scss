@@ -1,8 +1,12 @@
 .badge {
   @apply bg-gray-200 text-gray-900 px-2.5 text-xs py-1 rounded-md;
 
-  &--small {
+  &--sm {
     @apply px-1.5 py-0.5;
+  }
+
+  &--xs {
+    @apply text-3xs py-0.5 px-1;
   }
 
   &--green {
@@ -31,5 +35,9 @@
 
   &--yellow {
     @apply bg-yellow-100 text-yellow-900;
+  }
+
+  &--light-yellow {
+    @apply bg-yellow-50 text-yellow-600;
   }
 }

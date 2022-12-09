@@ -437,6 +437,7 @@ export default {
 
         commit('CREATE_SUCCESS', response)
 
+        // Make sure that feature flags are updated for automationsCount
         if (!config.isCommunityVersion) {
           posthog.reloadFeatureFlags()
         }
@@ -459,6 +460,7 @@ export default {
 
         commit('DESTROY_SUCCESS', automationId)
 
+        // Make sure that feature flags are updated for automationsCount
         if (!config.isCommunityVersion) {
           posthog.reloadFeatureFlags()
         }
@@ -488,6 +490,7 @@ export default {
 
         commit('DESTROY_ALL_SUCCESS', automationIds)
 
+        // Make sure that feature flags are updated for automationsCount
         if (!config.isCommunityVersion) {
           posthog.reloadFeatureFlags()
         }
