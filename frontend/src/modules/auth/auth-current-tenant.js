@@ -1,4 +1,5 @@
 import { tenantSubdomain } from '@/modules/tenant/tenant-subdomain'
+import posthog from 'posthog-js'
 
 /**
  * Auth Current Tenant
@@ -109,6 +110,8 @@ export default class AuthCurrentTenant {
     }
 
     localStorage.setItem('tenant', JSON.stringify(tenant))
+    posthog.group('tenant', tenant.id)
+    posthog.reloadFeatureFlags()
   }
 
   static clear() {
