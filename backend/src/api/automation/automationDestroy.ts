@@ -26,7 +26,7 @@ export default async (req, res) => {
 
   // wait a small window for posthog
   // to process the queue message before returing back
-  await timeout(300)
+  await timeout(1000)
 
   await req.responseHandler.success(req, res, true, 204)
 }
