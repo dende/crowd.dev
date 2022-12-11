@@ -1,4 +1,5 @@
 import { tenantSubdomain } from '@/modules/tenant/tenant-subdomain'
+import config from '@/config'
 import posthog from 'posthog-js'
 
 /**
@@ -109,9 +110,14 @@ export default class AuthCurrentTenant {
       return this.clear()
     }
 
+    // Set group in posthog with tenant id
+    // Refresh feature flags each time tenant is set
+    if (!config.isCommunityVersion) {
+      posthog.group('tenant', tenant.id)
+      posthog.reloadFeatureFlags()
+    }
+
     localStorage.setItem('tenant', JSON.stringify(tenant))
-    posthog.group('tenant', tenant.id)
-    posthog.reloadFeatureFlags()
   }
 
   static clear() {
