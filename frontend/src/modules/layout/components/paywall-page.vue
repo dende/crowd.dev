@@ -18,7 +18,10 @@
             href="https://www.crowd.dev/contact"
             target="_blank"
           >
-            <el-button class="btn btn--primary btn--md">
+            <el-button
+              class="btn btn--primary btn--md"
+              @click="onCtaClick"
+            >
               Contact us
             </el-button>
           </a>
@@ -36,5 +39,17 @@
 <script>
 export default {
   name: 'AppPaywallPage'
+}
+</script>
+
+<script setup>
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const onCtaClick = () => {
+  window.analytics.track('Upgrade Plan Contact', {
+    route: route.path
+  })
 }
 </script>
