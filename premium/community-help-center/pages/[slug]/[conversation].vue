@@ -8,6 +8,7 @@ let isLoaded = useState("isLoaded", () => {
   };
 });
 
+
 const styles = useState("styles", () => false);
 const { data, refresh } = await useAsyncData(`getTenantSlug`, () =>
   $fetch("/api/getTenantSlug", {
