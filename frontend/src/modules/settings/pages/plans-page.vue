@@ -127,7 +127,6 @@ const isCommunitPremiumVersion =
   config.communityPremium === 'true'
 
 const store = useStore()
-
 const isPlanModalOpen = ref(false)
 const planModalTitle = ref(null)
 
