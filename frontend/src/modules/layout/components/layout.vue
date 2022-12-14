@@ -212,8 +212,7 @@ export default {
           this.shouldShowSampleDataAlert ||
           this.shouldShowIntegrationsErrorAlert ||
           this.shouldShowIntegrationsInProgressAlert ||
-          this.shouldShowTenantCreatingAlert ||
-          this.shouldShowTenantCreatingAlert ||
+          this.shouldShowTenantCreatingAlert
       }
     },
     elMainStyle() {
