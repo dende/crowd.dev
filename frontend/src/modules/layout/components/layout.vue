@@ -143,6 +143,7 @@ export default {
       return this.currentTenant.hasSampleData
     },
     shouldShowPMFSurveyAlert() {
+      console.log('here')
       return (
         config.typeformId &&
         config.typeformTitle &&
