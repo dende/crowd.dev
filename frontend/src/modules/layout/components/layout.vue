@@ -116,6 +116,38 @@
               </div>
             </div>
           </banner>
+          <banner
+            v-if="shouldShowPMFSurveyAlert"
+            variant="info"
+          >
+            <div
+              class="flex items-center justify-center grow text-sm"
+            >
+              <div class="flex-1"></div>
+              <div class="">
+                Could you help us by answering a quick
+                survey? 😄
+                <button
+                  :data-tf-popup="typeformData.id"
+                  :data-tf-iframe-props="`title=${typeformData.title}`"
+                  data-tf-medium="snippet"
+                  class="btn btn--sm btn--primary ml-4"
+                  @click="hideTypeform()"
+                >
+                  Take survey
+                </button>
+              </div>
+              <div class="flex-1">
+                <div class="w-20 ml-auto">
+                  <button @click="hideTypeform()">
+                    <i
+                      class="ri-close-line text-gray-700"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </banner>
         </div>
         <router-view></router-view>
       </el-main>
@@ -191,7 +223,6 @@ export default {
       return this.currentTenant.hasSampleData
     },
     shouldShowPMFSurveyAlert() {
-      console.log('here')
       return (
         config.typeformId &&
         config.typeformTitle &&
@@ -213,7 +244,8 @@ export default {
           this.shouldShowIntegrationsErrorAlert ||
           this.shouldShowIntegrationsInProgressAlert ||
           this.shouldShowTenantCreatingAlert ||
-          this.shouldShowTenantCreatingAlert ||
+          this.shouldShowIntegrationsAlert ||
+          this.shouldShowPMFSurveyAlert
       }
     },
     elMainStyle() {
