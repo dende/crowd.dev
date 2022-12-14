@@ -16,8 +16,7 @@
           :class="{
             active: plan.key === activePlan,
             sale: plan.sale,
-            'custom-margin':
-              !isCommunityVersion && !plan.sale
+            'mt-6': !isCommunityVersion && !plan.sale
           }"
         >
           <div>
@@ -263,18 +262,6 @@ const getTrialDate = () => {
 
   &.sale {
     @apply rounded-t-none;
-  }
-}
-
-@media (max-width: 1062px) {
-  .pricing-plan.custom-margin {
-    @apply mt-10;
-  }
-}
-
-@media (min-width: 1063px) {
-  .pricing-plan.custom-margin {
-    @apply mt-6;
   }
 }
 </style>
