@@ -211,10 +211,14 @@ const handleSubredditValidation = async (index) => {
 
 const connect = async () => {
   console.log('PIZZLY', config.pizzlyUrl, config.pizzlyPublishableKey)
+  const url = new URL(`/oauth/connect/reddit?connection_id=${tenantId.value}-reddit&pizzly_pkey=${config.pizzlyPublishableKey}`, config.pizzlyUrl).href;
+  console.log('URL', url)
   const pizzly = new Pizzly(
     config.pizzlyUrl,
     config.pizzlyPublishableKey
   )
+  console.log('PIZZLY', pizzly.hostBaseUrl)
+
   await pizzly.auth('reddit', `${tenantId.value}-reddit`)
   await store.dispatch('integration/doRedditOnboard', {
     subreddits: model.value.map((i) => i.value)
