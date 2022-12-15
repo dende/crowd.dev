@@ -210,7 +210,7 @@ const handleSubredditValidation = async (index) => {
 }
 
 const connect = async () => {
-  console.log('PIZZLY', config.pizzlyUrl, config.pizzlyPublishableKey)
+  console.log('PIZZLY params', config.pizzlyUrl, config.pizzlyPublishableKey)
   const url = new URL(`/oauth/connect/reddit?connection_id=${tenantId.value}-reddit&pizzly_pkey=${config.pizzlyPublishableKey}`, config.pizzlyUrl).href;
   console.log('URL', url)
   const pizzly = new Pizzly(
