@@ -210,6 +210,7 @@ const handleSubredditValidation = async (index) => {
 }
 
 const connect = async () => {
+  console.log('PIZZLY', config.pizzlyUrl, config.pizzlyPublishableKey)
   const pizzly = new Pizzly(
     config.pizzlyUrl,
     config.pizzlyPublishableKey
