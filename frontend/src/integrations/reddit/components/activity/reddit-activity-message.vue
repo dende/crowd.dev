@@ -1,69 +1,40 @@
 <template>
-  <div v-if="!short && !channelOnly">
+  <span>
     <app-i18n
-      v-if="!channelOnly"
       :code="computedMessage"
-      :args="computedArgs"
       :fallback="'entities.activity.fallback'"
     ></app-i18n>
-    <span v-if="!channelOnly && isComment"
-      >on
-      <a
-        :href="activity.attributes.parentUrl"
-        target="_blank"
-        class="truncate"
+    <span v-if="isComment">
+      on
+      <a :href="activity.url" target="_blank">{{
+        computedParentTitle
+          ? computedParentTitle
+          : computedGreatParentTitle
+      }}</a>
+      in
+      <a :href="computedSubredditUrl" target="_blank"
+        >/r/{{ activity.channel }}</a
       >
-        {{ computedParentTitle }}</a
-      ></span
-    >
-    <span v-if="!channelOnly && !isComment"
-      >&nbsp;mentioning</span
-    >
-    <a
-      v-if="!isComment && isUrl"
-      :href="`https://${activity.channel}`"
-      target="__blank"
-      >&nbsp;{{ computedChannel }}
-    </a>
-    <span v-if="!isComment && !isUrl" class="italic"
-      >&nbsp;{{ computedChannel }}
     </span>
-  </div>
-  <div v-else-if="short" class="truncate">
-    <app-i18n
-      v-if="!channelOnly"
-      :code="computedMessage"
-      :args="computedArgs"
-      :fallback="'entities.activity.fallback'"
-    ></app-i18n>
-    <span v-if="isComment">on a post </span>
     <span v-else
-      >&nbsp;mentioning {{ computedChannelShort }}
-    </span>
-  </div>
+      >in subreddit
+      <a :href="computedSubredditUrl" target="_blank">
+        r/{{ activity.channel }}
+      </a></span
+    >
+  </span>
 </template>
 
 <script>
 import AppI18n from '@/shared/i18n/i18n'
-import { computedArgs } from '@/modules/activity/activity.helpers'
 import isUrl from '@/utils/isUrl'
 export default {
-  name: 'AppHackerNewsActivityMessage',
+  name: 'AppRedditActivityMessage',
   components: { AppI18n },
   props: {
     activity: {
       type: Object,
       required: true
-    },
-    short: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    channelOnly: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   computed: {
@@ -72,9 +43,6 @@ export default {
     },
     computedMessage() {
       return `entities.activity.${this.activity.platform}.${this.activity.type}`
-    },
-    computedArgs() {
-      return computedArgs(this.activity)
     },
     computedChannel() {
       if (this.activity.channel.length > 60) {
@@ -96,11 +64,29 @@ export default {
           .length >= 60
           ? this.activity.attributes.parentTitle.substring(
               0,
-              60
+              20
             ) + '...'
           : this.activity.attributes.parentTitle
       }
-      return ''
+      return null
+    },
+    computedGreatParentTitle() {
+      if (this.activity.attributes.greatParentTitle) {
+        return this.activity.attributes.greatParentTitle
+          .length >= 60
+          ? this.activity.attributes.greatParentTitle.substring(
+              0,
+              20
+            ) + '...'
+          : this.activity.attributes.greatParentTitle
+      }
+      return null
+    },
+    computedSubredditUrl() {
+      if (this.activity.channel) {
+        return `https://reddit.com/r/${this.activity.channel}`
+      }
+      return null
     },
     isUrl() {
       return isUrl(this.activity.channel)
