@@ -37,7 +37,10 @@ const defaultConfig = {
   pizzlyUrl: process.env.VUE_APP_PIZZLY_URL,
   pizzlyPublishableKey:
     process.env.VUE_APP_PIZZLY_PUBLISHABLE_KEY,
-  posthogKey: process.env.VUE_APP_POSTHOG_API_KEY
+  posthog: {
+    apiKey: process.env.VUE_APP_POSTHOG_API_KEY,
+    host: process.env.VUE_APP_POSTHOG_HOST
+  }
 }
 
 const composedConfig = {
@@ -66,7 +69,10 @@ const composedConfig = {
   pizzlyUrl: 'CROWD_VUE_APP_PIZZLY_URL',
   pizzlyPublishableKey:
     'CROWD_VUE_APP_PIZZLY_PUBLISHABLE_KEY',
-  posthogKey: 'CROWD_VUE_APP_POSTHOG_API_KEY'
+  posthog: {
+    apiKey: 'CROWD_VUE_APP_POSTHOG_API_KEY',
+    host: 'CROWD_VUE_APP_POSTHOG_HOST'
+  }
 }
 
 const config = defaultConfig.backendUrl
