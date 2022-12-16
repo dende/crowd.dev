@@ -12,14 +12,12 @@ export default function identify(
   userId: any = false,
   timestamp: any = false,
 ) {
-  log.info('Starting track', {event, isTestEnv: IS_TEST_ENV, segmentConfig: SEGMENT_CONFIG, apiConfig: API_CONFIG})
   if (
     !IS_TEST_ENV &&
     SEGMENT_CONFIG.writeKey &&
     // This is only for events in the hosted version. Self-hosted has less telemetry.
     API_CONFIG.edition === Edition.CROWD_HOSTED
   ) {
-    log.info('In the IF', {event})
     const Analytics = require('analytics-node')
     const analytics = new Analytics(SEGMENT_CONFIG.writeKey)
 
@@ -34,8 +32,6 @@ export default function identify(
       },
       ...(timestamp && { timestamp }),
     }
-
-    log.info('Payload', {payload})
 
     try {
       analytics.track(payload)
