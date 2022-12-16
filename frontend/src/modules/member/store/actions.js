@@ -1,52 +1,72 @@
 import { MemberService } from '@/modules/member/member-service'
-import memberListExporterFields from '@/modules/member/member-list-exporter-fields'
 import Errors from '@/shared/error/errors'
-import Exporter from '@/shared/exporter/exporter'
 import { router } from '@/router'
 import Message from '@/shared/message/message'
 import { i18n } from '@/i18n'
 import { MemberModel } from '../member-model'
 import { FormSchema } from '@/shared/form/form-schema'
 import sharedActions from '@/shared/store/actions'
+import InformationDialog from '@/shared/dialog/information-dialog'
 
 export default {
   ...sharedActions('member', MemberService),
 
-  async doExport({ commit, getters }) {
-    try {
-      if (
-        !memberListExporterFields ||
-        !memberListExporterFields.length
-      ) {
-        throw new Error(
-          'memberListExporterFields is required'
-        )
+  async doExport({ commit, getters }, selected = false) {
+    let filter
+    if (selected) {
+      filter = {
+        id: {
+          in: [getters.selectedRows.map((i) => i.id)]
+        }
       }
+    } else {
+      filter = getters.activeView.filter
+    }
 
-      commit('EXPORT_STARTED')
+    try {
+      commit('EXPORT_STARTED', filter)
 
-      const activeView = getters.activeView
-
-      const response = await MemberService.list(
-        activeView.filter,
+      await MemberService.export(
+        filter,
         getters.orderBy,
+        0,
         null,
-        null
+        !selected // build API payload if selected === false
       )
-
-      new Exporter(
-        memberListExporterFields,
-        'member'
-      ).transformAndExportAsExcelFile(response.rows)
-
       commit('EXPORT_SUCCESS')
 
-      Message.success('Members exported successfully')
+      await InformationDialog({
+        title: 'Export CSV',
+        message:
+          'The CSV file was sent to your e-mail in order for you to download it',
+        icon: 'ri-file-download-line',
+        confirmButtonText: 'Continue',
+        label: selected
+          ? `${getters.selectedRows.length} member${
+              getters.selectedRows.length === 1 ? '' : 's'
+            }`
+          : getters.activeView.label
+      })
     } catch (error) {
       Errors.handle(error)
 
       commit('EXPORT_ERROR')
-      Message.error('There was an error exporting members')
+
+      if (error.response.status === 403) {
+        await InformationDialog({
+          type: 'danger',
+          title:
+            'You have reached the limit of 2 CSV exports per month on your current plan',
+          message:
+            'Upgrade your plan to get unlimited CSV exports per month and take full advantage of this feature',
+          confirmButtonText: 'Upgrade plan'
+        })
+        router.push('settings?activeTab=plans')
+      } else {
+        Message.error(
+          'There was an error exporting members'
+        )
+      }
     }
   },
 
