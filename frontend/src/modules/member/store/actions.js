@@ -16,7 +16,7 @@ export default {
     if (selected) {
       filter = {
         id: {
-          in: [getters.selectedRows.map((i) => i.id)]
+          in: getters.selectedRows.map((i) => i.id)
         }
       }
     } else {
