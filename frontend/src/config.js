@@ -66,11 +66,6 @@ const composedConfig = {
   pizzlyUrl: 'CROWD_VUE_APP_PIZZLY_URL',
   pizzlyPublishableKey:
     'CROWD_VUE_APP_PIZZLY_PUBLISHABLE_KEY',
-  pizzlyUrl: 'CROWD_VUE_APP_PIZZLY_URL',
-  pizzlyPublishableKey:
-    'CROWD_VUE_APP_PIZZLY_PUBLISHABLE_KEY',
-  typeformId: 'CROWD_VUE_APP_TYPEFORM_ID',
-  typeformTitle: 'CROWD_VUE_APP_TYPEFORM_TITLE',
   posthogKey: 'CROWD_VUE_APP_POSTHOG_API_KEY'
 }
 
