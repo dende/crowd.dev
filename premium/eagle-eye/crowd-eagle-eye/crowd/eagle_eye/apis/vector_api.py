@@ -190,7 +190,7 @@ class VectorAPI:
         start = self._get_timestamp(ndays)
         should = []
 
-        exclude = [int(e) for e in exclude]
+        # exclude = [int(e) for e in exclude]
 
         if exact_keywords:
             for exact_keyword in exact_keywords:
