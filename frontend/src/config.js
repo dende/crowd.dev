@@ -37,11 +37,6 @@ const defaultConfig = {
   pizzlyUrl: process.env.VUE_APP_PIZZLY_URL,
   pizzlyPublishableKey:
     process.env.VUE_APP_PIZZLY_PUBLISHABLE_KEY,
-  pizzlyUrl: process.env.VUE_APP_PIZZLY_URL,
-  pizzlyPublishableKey:
-    process.env.VUE_APP_PIZZLY_PUBLISHABLE_KEY,
-  typeformId: process.env.VUE_APP_TYPEFORM_ID,
-  typeformTitle: process.env.VUE_APP_TYPEFORM_TITLE,
   posthogKey: process.env.VUE_APP_POSTHOG_API_KEY
 }
 
