@@ -217,6 +217,13 @@ const getCtaContent = (plan) => {
 }
 
 const handleOnCtaClick = (plan) => {
+  // Send an event with plan request
+  window.analytics.track('Change Plan Request', {
+    tenantId: currentTenant.value.id,
+    tenantName: currentTenant.value.name,
+    requestedPlan: plan
+  })
+
   // Custom plans
   if (
     plan === crowdHostedPlans.enterprise ||
@@ -226,16 +233,15 @@ const handleOnCtaClick = (plan) => {
       'https://cal.com/team/CrowdDotDev/custom-plan',
       '_blank'
     )
+    // Growth plan
+  } else if (plan === crowdHostedPlans.growth) {
+    window.open(
+      'https://buy.stripe.com/4gw9E8c163K6fzW9AB',
+      '_blank'
+    )
   } else {
     isPlanModalOpen.value = true
     planModalTitle.value = getCtaContent(plan)
-
-    // Send an event with plan request
-    window.analytics.track('Change Plan Request', {
-      tenantId: currentTenant.value.id,
-      tenantName: currentTenant.value.name,
-      requestedPlan: plan
-    })
   }
 }
 
