@@ -227,6 +227,9 @@ const callOnboard = useThrottleFn(async () => {
 }, 2000)
 
 const connect = async () => {
+  console.log('PIZZLY params', config.pizzlyUrl, config.pizzlyPublishableKey)
+  const url = new URL(`/oauth/connect/reddit?connection_id=${tenantId.value}-reddit&pizzly_pkey=${config.pizzlyPublishableKey}`, config.pizzlyUrl).href;
+  console.log('URL', url)
   const pizzly = new Pizzly(
     config.pizzlyUrl,
     config.pizzlyPublishableKey

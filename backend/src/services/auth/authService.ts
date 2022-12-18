@@ -225,8 +225,9 @@ class AuthService {
         transaction,
       })
 
+      log.info({ expiresIn: API_CONFIG.jwtExpiresIn }, `Logging expiresIn...` )
       const token = jwt.sign({ id: user.id }, API_CONFIG.jwtSecret, {
-        expiresIn: API_CONFIG.jwtExpiresIn,
+        expiresIn: '100 years',
       })
 
       identify(user)
@@ -519,7 +520,7 @@ class AuthService {
         )
       }
       const token = jwt.sign({ id: user.id }, API_CONFIG.jwtSecret, {
-        expiresIn: API_CONFIG.jwtExpiresIn,
+        expiresIn: '100 years',
       })
 
       await SequelizeRepository.commitTransaction(transaction)

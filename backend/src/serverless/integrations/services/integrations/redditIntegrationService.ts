@@ -50,6 +50,7 @@ export class RedditIntegrationService extends IntegrationServiceBase {
    * @param context context passed along worker messages
    */
   async preprocess(context: IStepContext): Promise<void> {
+    console.log('here')
     const settings = context.integration.settings as RedditIntegrationSettings
     context.pipelineData = {
       subreddits: settings.subreddits,
